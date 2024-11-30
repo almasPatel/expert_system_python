@@ -1,0 +1,130 @@
+import tkinter as tk
+from tkinter import scrolledtext
+
+def get_response(user_message):
+    knowledge_base = {
+        # General responses
+        "name": "My name is Expert System.",
+        "how are you": "I'm doing well, thank you!",
+        "purpose": "I'm here to assist you with your queries.",
+        "help": "Yes, I'll do my best to help you.",
+        "what can you do": "I can answer questions and provide information on a wide range of topics.",
+        "goodbye": "Goodbye! It was nice chatting with you.",
+        
+        # Project-specific responses
+        "title": "The title is 'Automatic Timetable Generator'.",
+        "goal": "The goal is to automate the generation of timetables for educational institutions.",
+        "inputs": "The system requires inputs such as available classrooms, teachers, and subjects.",
+        "algorithms": "The system uses constraint satisfaction algorithms, optimization algorithms, and genetic algorithms.",
+        "programming languages": "The programming languages used are Python, Java, and Node.js with Express.js.",
+        "databases": "The system supports MySQL or MongoDB as the database.",
+        "web frameworks": "You can use Django or Flask for the web-based interface.",
+        "front-end": "HTML, CSS, JavaScript, or React.js are used for front-end development.",
+        "authentication module": "It ensures secure access by verifying user credentials.",
+        "input management module": "It allows users to input data like classrooms, teachers, and subjects.",
+        "timetable generation module": "It creates efficient and conflict-free timetables using optimization algorithms.",
+        "schedule management module": "It provides functionalities for viewing, editing, and managing generated timetables.",
+        "real-time adjustment module": "It enables users to make real-time adjustments to the timetable based on resource availability.",
+        "hardware requirements": "Standard computer hardware with sufficient processing power is required.",
+        "software requirements": "The system uses Python, Java, Node.js, MySQL/MongoDB, Django/Flask, HTML, CSS, JavaScript, and optimization algorithms.",
+        "advantages": "The system is efficient, accurate, flexible, secure, and scalable.",
+        "efficiency": "It significantly reduces the time required to generate timetables.",
+        "accuracy": "It minimizes human errors and ensures conflict-free schedules.",
+        "flexibility": "The system allows easy adjustments and updates to timetables.",
+        "security": "Security is ensured through authentication mechanisms.",
+        "scalability": "The system can handle large volumes of data and multiple departments.",
+        "future enhancements": "Future enhancements include a mobile app, AI integration, a user feedback system, and integration with academic management systems.",
+        "mobile application": "Yes, a mobile app version is planned for easy access on the go.",
+        "ai integration": "AI will be incorporated to improve optimization algorithms and handle complex constraints.",
+        "feedback system": "It will gather user input to improve the system continuously.",
+        "academic management system": "It allows seamless integration with other academic management tools.",
+        "enhanced reporting": "It involves developing more comprehensive reporting features, including data analytics and visualization.",
+        "authentication": "Authentication ensures only authorized users can access and manage the timetable data.",
+        "conflict-free": "Conflict-free timetables ensure no overlap in the schedules of classrooms, teachers, or subjects.",
+        "real-time adjustment": "Real-time adjustment allows immediate updates to the timetable based on current availability.",
+        "constraint satisfaction algorithm": "It is an algorithm used to solve problems with multiple constraints by finding solutions that satisfy all conditions.",
+        "genetic algorithm": "A genetic algorithm is a search heuristic that mimics natural selection to generate optimized solutions.",
+        "time-saving": "Automation eliminates the need for manual effort in generating schedules, speeding up the process.",
+        "manual timetable": "Manual methods are time-consuming, prone to errors, and inefficient for large institutions.",
+        "user-friendly interface": "A user-friendly interface makes it easy for administrators to input data and manage timetables efficiently.",
+        "optimized timetable": "An optimized timetable maximizes the efficient use of resources while meeting all scheduling constraints.",
+        "scheduling constraints": "Scheduling constraints include room availability, teacher schedules, and subject requirements.",
+        "adjust timetables": "Timetables can be adjusted in real-time by modifying inputs like teacher availability or classroom assignments.",
+        "conflict resolution": "The system uses algorithms to detect and resolve conflicts automatically during timetable generation.",
+        "multiple departments": "Yes, the system is scalable and can manage timetables for multiple departments within an institution.",
+        "optimization algorithms": "Optimization algorithms help generate the most efficient and conflict-free timetable based on inputs.",
+        "large institutions": "The system is designed to handle large volumes of data and complex scheduling requirements.",
+        "impact of automation": "Automation reduces manual workload, improves accuracy, and saves time in the scheduling process.",
+        "purpose of project": "The project aims to automate the timetable creation process and minimize human error."
+    }
+    
+    # Lowercase user message for keyword matching
+    user_message = user_message.lower()
+
+    for keyword, response in knowledge_base.items():
+        if keyword in user_message:
+            return response
+
+    return "I'm not sure I understand. Can you please rephrase your question?"
+
+class ExpertSystemGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Expert System Chat")
+        self.root.configure(bg="#2C3E50")
+        self.root.geometry("600x500")  # Set the window size
+
+        # Add headline for the expert system
+        self.headline = tk.Label(
+            root, text="Expert System for Automatic Timetable Generator", 
+            bg="#2C3E50", fg="#ECF0F1", font=("Helvetica", 16, "bold")
+        )
+        self.headline.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+        # Create chat display area
+        self.chat_display = scrolledtext.ScrolledText(
+            root, wrap=tk.WORD, state='disabled', 
+            width=70, height=20, 
+            bg="#ECF0F1", fg="#2C3E50", 
+            font=("Helvetica", 12), 
+            padx=10, pady=10, relief=tk.FLAT
+        )
+        self.chat_display.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+        # Create entry box for user input
+        self.user_input = tk.Entry(
+            root, width=55, 
+            bg="#ECF0F1", fg="#2C3E50", 
+            font=("Helvetica", 12), relief=tk.FLAT
+        )
+        self.user_input.grid(row=2, column=0, padx=10, pady=10)
+
+        # Create a send button
+        self.send_button = tk.Button(
+            root, text="Send", command=self.send_message, 
+            bg="#3498DB", fg="#ECF0F1", 
+            font=("Helvetica", 12, "bold"), relief=tk.FLAT
+        )
+        self.send_button.grid(row=2, column=1, padx=10, pady=10)
+
+        # Bind the Enter key to send the message
+        self.root.bind('<Return>', self.send_message)
+
+    def send_message(self, event=None):
+        user_message = self.user_input.get().strip()
+        if user_message:
+            self.display_message("You", user_message)
+            self.user_input.delete(0, tk.END)
+            response = get_response(user_message)
+            self.display_message("Expert System", response)
+
+    def display_message(self, sender, message):
+        self.chat_display.config(state='normal')
+        self.chat_display.insert(tk.END, f"{sender}: {message}\n\n")
+        self.chat_display.yview(tk.END)
+        self.chat_display.config(state='disabled')
+
+# Create the main window
+root = tk.Tk()
+app = ExpertSystemGUI(root)
+root.mainloop()
